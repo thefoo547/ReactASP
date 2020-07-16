@@ -34,15 +34,14 @@ namespace WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
-            /*var course = await _context.Courses.FindAsync(id);
+            var course = await _mediator.Send(new QueryId.CourseById { Id = id });
 
             if (course == null)
             {
                 return NotFound();
             }
 
-            return course;*/
-            throw new NotImplementedException();
+            return course;
         }
 
         // PUT: api/Courses/5
