@@ -1,8 +1,10 @@
 ﻿using Domain.Entities;
+using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,8 +17,18 @@ namespace App.Courses
         {
             public string Title { get; set; }
             public string Description { get; set; }
-            public DateTime Uploaded { get; set; }
+            public DateTime? Uploaded { get; set; }
         }
+        public class CreateValidate : AbstractValidator<Create>
+        {
+            public CreateValidate()
+            {
+                RuleFor(x => x.Title).NotEmpty();
+                RuleFor(x => x.Description).NotEmpty();
+                RuleFor(x => x.Uploaded).NotEmpty();
+            }
+        }
+
         public class Handler : IRequestHandler<Create>
         {
             private readonly AppDBContext context;

@@ -48,34 +48,11 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCourse(int id, Course course)
+        public async Task<ActionResult<Unit>> PutCourse(int id, EditCourse.Update course)
         {
-            /*if (id != course.CourseId)
-            {
-                return BadRequest();
-            }
+            course.CourseId = id;
 
-            _context.Entry(course).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CourseExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();*/
-
-            throw new NotImplementedException();
+            return await _mediator.Send(course);
         }
 
         // POST: api/Courses
@@ -89,20 +66,9 @@ namespace WebAPI.Controllers
 
         // DELETE: api/Courses/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Course>> DeleteCourse(int id)
+        public async Task<ActionResult<Unit>> DeleteCourse(int id)
         {
-            /*var course = await _context.Courses.FindAsync(id);
-            if (course == null)
-            {
-                return NotFound();
-            }
-
-            _context.Courses.Remove(course);
-            await _context.SaveChangesAsync();
-
-            return course;*/
-
-            throw new NotImplementedException();
+            return await _mediator.Send(new RemoveCourse.Delete(){CourseId=id });
         }
 
         private bool CourseExists(int id)

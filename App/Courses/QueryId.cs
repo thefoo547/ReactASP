@@ -1,9 +1,11 @@
-﻿using Domain.Entities;
+﻿using App.ErrorHandlers;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,6 +30,9 @@ namespace App.Courses
             public async Task<Course> Handle(CourseById request, CancellationToken cancellationToken)
             {
                 var course = await context.Courses.FindAsync(request.Id);
+                if(course == null)
+                    throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
+
                 return course;
             }
         }
