@@ -82,14 +82,9 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Course>> PostCourse(Course course)
+        public async Task<ActionResult<Unit>> PostCourse(NewCourse.Create newcourse)
         {
-            /*_context.Courses.Add(course);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetCourse", new { id = course.CourseId }, course);*/
-
-            throw new NotImplementedException();
+            return await _mediator.Send(newcourse);
         }
 
         // DELETE: api/Courses/5
