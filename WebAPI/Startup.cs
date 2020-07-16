@@ -16,6 +16,8 @@ using Persistence;
 using App.Courses;
 using FluentValidation.AspNetCore;
 using WebAPI.Middleware;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace WebAPI
 {
@@ -33,10 +35,17 @@ namespace WebAPI
         {
             services.AddDbContext<AppDBContext>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b=>b.MigrationsAssembly("WebAPI"));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b=>b.MigrationsAssembly("Persistence"));
             });
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<NewCourse>());
+
+            var authBuilder = services.AddIdentityCore<User>();
+            var identityBuilder = new IdentityBuilder(authBuilder.UserType, authBuilder.Services);
+            identityBuilder.AddEntityFrameworkStores<AppDBContext>();
+            identityBuilder.AddSignInManager<SignInManager<User>>();
+
+        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
