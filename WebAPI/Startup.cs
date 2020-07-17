@@ -20,6 +20,7 @@ using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authentication;
+using App.Secure;
 
 namespace WebAPI
 {
@@ -40,6 +41,8 @@ namespace WebAPI
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b=>b.MigrationsAssembly("Persistence"));
             });
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
+            // ES NECESARIO AGREGAR LOS MEDIATR CON ESTRUCTURAS DIFERENTES
+            services.AddMediatR(typeof(Login.Handler).Assembly);
             services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<NewCourse>());
             services.TryAddSingleton<ISystemClock, SystemClock>();
 

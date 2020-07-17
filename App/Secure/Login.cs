@@ -7,18 +7,18 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Secure
+namespace App.Secure
 {
     public class Login
     {
-        public class LoginRequest : IRequest<User>
+        public class LoginRequest : IRequest<UserData>
         {
             public string Email { get; set; }
             public string Password { get; set; }
 
         }
 
-        public class Handler : IRequestHandler<Login.LoginRequest, User>
+        public class Handler : IRequestHandler<LoginRequest, UserData>
         {
             private readonly UserManager<User> userManager;
             private readonly SignInManager<User> signInManager;
@@ -29,7 +29,7 @@ namespace Secure
                 this.signInManager = signInManager;
             }
 
-            public async Task<User> Handle(LoginRequest request, CancellationToken cancellationToken)
+            public async Task<UserData> Handle(LoginRequest request, CancellationToken cancellationToken)
             {
                 var user = await userManager.FindByEmailAsync(request.Email);
                 if (user == null)
@@ -37,7 +37,13 @@ namespace Secure
 
                 var res = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-                return (res.Succeeded) ? user : throw new BusinessException(System.Net.HttpStatusCode.Unauthorized, "Usuario o Contraseña no válidos");
+                return (res.Succeeded) ? new UserData { 
+                    FullName = user.FullName,
+                    Token = "DATA DEL TOKE MI REY",
+                    Username = user.UserName,
+                    Email = user.Email,
+                    Image = null
+                } : throw new BusinessException(System.Net.HttpStatusCode.Unauthorized, "Usuario o Contraseña no válidos");
             }
         }
 
