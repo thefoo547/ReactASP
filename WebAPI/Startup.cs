@@ -21,6 +21,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using App.Secure;
+using App.Contracts;
+using Security.Token;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Text;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace WebAPI
 {
@@ -43,7 +51,11 @@ namespace WebAPI
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             // ES NECESARIO AGREGAR LOS MEDIATR CON ESTRUCTURAS DIFERENTES
             services.AddMediatR(typeof(Login.Handler).Assembly);
-            services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<NewCourse>());
+            services.AddControllers(opt => {
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+                .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<NewCourse>());
             services.TryAddSingleton<ISystemClock, SystemClock>();
 
             var authBuilder = services.AddIdentityCore<User>();
@@ -51,6 +63,16 @@ namespace WebAPI
             identityBuilder.AddEntityFrameworkStores<AppDBContext>();
             identityBuilder.AddSignInManager<SignInManager<User>>();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters { 
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.Unicode.GetBytes("Palabra secreta")),
+                    ValidateAudience = false,
+                    ValidateIssuer = false
+                });
+
+            services.AddScoped<IJWTGenerator, JWTGenerator>();
+           
         
         }
 
@@ -65,7 +87,9 @@ namespace WebAPI
             }
 
             app.UseHttpsRedirection();
-
+            
+            app.UseAuthentication();
+            
             app.UseRouting();
 
             app.UseAuthorization();
@@ -74,6 +98,8 @@ namespace WebAPI
             {
                 endpoints.MapControllers();
             });
+
+            
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using App.Secure;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    [AllowAnonymous]
     public class UserController : BreveControllerBase
     {
         [HttpPost("login")]

@@ -1,4 +1,5 @@
-﻿using App.ErrorHandlers;
+﻿using App.Contracts;
+using App.ErrorHandlers;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -22,11 +23,14 @@ namespace App.Secure
         {
             private readonly UserManager<User> userManager;
             private readonly SignInManager<User> signInManager;
+            private readonly IJWTGenerator generator;
 
-            public Handler(UserManager<User> userManager, SignInManager<User> signInManager)
+            public Handler(UserManager<User> userManager, SignInManager<User> signInManager,
+                IJWTGenerator generator)
             {
                 this.userManager = userManager;
                 this.signInManager = signInManager;
+                this.generator = generator;
             }
 
             public async Task<UserData> Handle(LoginRequest request, CancellationToken cancellationToken)
@@ -37,9 +41,9 @@ namespace App.Secure
 
                 var res = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
-                return (res.Succeeded) ? new UserData { 
+                return (res.Succeeded) ? new UserData {
                     FullName = user.FullName,
-                    Token = "DATA DEL TOKE MI REY",
+                    Token = generator.CreateToken(user),
                     Username = user.UserName,
                     Email = user.Email,
                     Image = null

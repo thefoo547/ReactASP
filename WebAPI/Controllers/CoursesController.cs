@@ -9,12 +9,14 @@ using Domain.Entities;
 using Persistence;
 using MediatR;
 using App.Courses;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
     public class CoursesController : BreveControllerBase
     {
         // GET: api/Courses
+        
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
@@ -22,6 +24,7 @@ namespace WebAPI.Controllers
         }
 
         // GET: api/Courses/5
+        
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
@@ -39,6 +42,7 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
+        
         public async Task<ActionResult<Unit>> PutCourse(int id, EditCourse.Update course)
         {
             course.CourseId = id;
@@ -50,6 +54,7 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
+        
         public async Task<ActionResult<Unit>> PostCourse(NewCourse.Create newcourse)
         {
             return await Mediator.Send(newcourse);
