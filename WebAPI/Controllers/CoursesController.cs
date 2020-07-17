@@ -12,29 +12,20 @@ using App.Courses;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class CoursesController : ControllerBase
+    public class CoursesController : BreveControllerBase
     {
-        private readonly IMediator _mediator;
-
-        public CoursesController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
-
         // GET: api/Courses
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Course>>> GetCourses()
         {
-            return await _mediator.Send(new QueryAll.CoursesList());
+            return await Mediator.Send(new QueryAll.CoursesList());
         }
 
         // GET: api/Courses/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Course>> GetCourse(int id)
         {
-            var course = await _mediator.Send(new QueryId.CourseById { Id = id });
+            var course = await Mediator.Send(new QueryId.CourseById { Id = id });
 
             if (course == null)
             {
@@ -52,7 +43,7 @@ namespace WebAPI.Controllers
         {
             course.CourseId = id;
 
-            return await _mediator.Send(course);
+            return await Mediator.Send(course);
         }
 
         // POST: api/Courses
@@ -61,14 +52,14 @@ namespace WebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Unit>> PostCourse(NewCourse.Create newcourse)
         {
-            return await _mediator.Send(newcourse);
+            return await Mediator.Send(newcourse);
         }
 
         // DELETE: api/Courses/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> DeleteCourse(int id)
         {
-            return await _mediator.Send(new RemoveCourse.Delete(){CourseId=id });
+            return await Mediator.Send(new RemoveCourse.Delete(){CourseId=id });
         }
 
         private bool CourseExists(int id)

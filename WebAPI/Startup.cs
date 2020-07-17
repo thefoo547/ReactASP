@@ -18,6 +18,8 @@ using FluentValidation.AspNetCore;
 using WebAPI.Middleware;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Authentication;
 
 namespace WebAPI
 {
@@ -39,6 +41,7 @@ namespace WebAPI
             });
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<NewCourse>());
+            services.TryAddSingleton<ISystemClock, SystemClock>();
 
             var authBuilder = services.AddIdentityCore<User>();
             var identityBuilder = new IdentityBuilder(authBuilder.UserType, authBuilder.Services);
