@@ -30,6 +30,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
+using Persistence.DapperConn;
 
 namespace WebAPI
 {
@@ -49,6 +50,7 @@ namespace WebAPI
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b=>b.MigrationsAssembly("Persistence"));
             });
+            services.Configure<ConnConfig>(Configuration.GetSection("DefaultConnection"));
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             // ES NECESARIO AGREGAR LOS MEDIATR CON ESTRUCTURAS DIFERENTES
             services.AddMediatR(typeof(Login.Handler).Assembly);
