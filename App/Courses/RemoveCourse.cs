@@ -38,9 +38,19 @@ namespace App.Courses
                     context.CourseInstructors.Remove(inst);
                 }
 
+                var comments = context.Comments.Where(x => x.CourseId == request.CourseId);
+
+                foreach (var comment in comments)
+                {
+                    context.Comments.Remove(comment);
+                }
+
+                var price = context.Prices.Where(x => x.CourseId == request.CourseId).FirstOrDefault();
+
+                if (price != null)
+                    context.Prices.Remove(price);
+
                 var course = await context.Courses.FindAsync(request.CourseId);
-
-
 
                 if (course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { msg = "No se encotró el curso" });

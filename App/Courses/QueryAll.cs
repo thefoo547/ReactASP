@@ -35,6 +35,8 @@ namespace App.Courses
                     .Include(x=>x.Instructors)
                     .ThenInclude(x=>x.Instructor).ToListAsync();
 
+                Console.WriteLine(courses[0]);
+
                 var coursesDto = mapper.Map<List<Course>, List<CourseDTO>>(courses);
 
                 return coursesDto;

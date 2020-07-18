@@ -19,6 +19,8 @@ namespace App.Courses
             public string Description { get; set; }
             public DateTime? Uploaded { get; set; }
             public List<Guid> Instructors { get; set; }
+            public decimal PriceActual { get; set; }
+            public decimal Discount { get; set; }
         }
         public class CreateValidate : AbstractValidator<Create>
         {
@@ -39,11 +41,12 @@ namespace App.Courses
             }
             public async Task<Unit> Handle(Create request, CancellationToken cancellationToken)
             {
+                var cid = Guid.NewGuid();
                 var course = new Course()
                 {
-                    CourseId = Guid.NewGuid(),
+                    CourseId = cid,
                     Title = request.Title,
-                    Description = request.Title,
+                    Description = request.Description,
                     Uploaded = request.Uploaded
                 };
                 context.Courses.Add(course);
@@ -59,6 +62,17 @@ namespace App.Courses
                         context.CourseInstructors.Add(instructorCourse);
                     }
                 }
+
+                var pricen = new Price
+                {
+                    CourseId = cid,
+                    ActualPrice = request.PriceActual,
+                    Promo = request.Discount,
+                    PriceId = Guid.NewGuid()
+                };
+
+                context.Prices.Add(pricen);
+
                 var value = await context.SaveChangesAsync();
 
                 return (value > 0) ? Unit.Value : throw new Exception("No se pudo ingresar el curso");

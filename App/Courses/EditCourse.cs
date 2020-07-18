@@ -22,6 +22,8 @@ namespace App.Courses
             public string Description { get; set; }
             public DateTime? Uploaded { get; set; }
             public List<Guid> Instructors { get; set; }
+            public decimal? PriceActual { get; set; }
+            public decimal? Discount { get; set; }
 
         }
         public class Handler : IRequestHandler<Update>
@@ -47,11 +49,28 @@ namespace App.Courses
 
                 if (course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
-                    //throw new Exception("Dicho curso no existe");
+                //throw new Exception("Dicho curso no existe");
 
                 course.Title = request.Title ?? course.Title;
                 course.Description = request.Description ?? course.Description;
                 course.Uploaded = request.Uploaded ?? course.Uploaded;
+
+                var pricen = context.Prices.Where(x => x.CourseId == course.CourseId).FirstOrDefault();
+                if(pricen != null)
+                {
+                    pricen.Promo = request.Discount ?? pricen.Promo;
+                    pricen.ActualPrice = request.PriceActual ?? pricen.ActualPrice;
+                }
+                else
+                {
+                    pricen = new Price
+                    {
+                        PriceId = Guid.NewGuid(),
+                        ActualPrice = request.PriceActual ?? 0,
+                        Promo = request.Discount ?? 0,
+                        CourseId = course.CourseId
+                    };
+                }
 
                 if(request.Instructors != null && request.Instructors.Count > 0)
                 {
