@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
 using Persistence.DapperConn;
+using Persistence.DapperConn.Instructor;
 
 namespace WebAPI
 {
@@ -48,9 +49,11 @@ namespace WebAPI
         {
             services.AddDbContext<AppDBContext>(opt =>
             {
-                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b=>b.MigrationsAssembly("Persistence"));
+                opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("Persistence"));
             });
-            services.Configure<ConnConfig>(Configuration.GetSection("DefaultConnection"));
+
+            services.AddOptions();
+            services.Configure<ConnConfig>(Configuration.GetSection("ConnectionStrings"));
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             // ES NECESARIO AGREGAR LOS MEDIATR CON ESTRUCTURAS DIFERENTES
             services.AddMediatR(typeof(Login.Handler).Assembly);
@@ -77,7 +80,9 @@ namespace WebAPI
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<ISessionUser, SessionUser>();
             services.AddAutoMapper(typeof(QueryAll));
-        
+
+            services.AddTransient<IFactoryConnection, FactoryConnection>();
+            services.AddScoped<IInstructorRepo, InstructorRepo>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

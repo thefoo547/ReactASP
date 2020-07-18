@@ -12,9 +12,9 @@ namespace Persistence.DapperConn
         private IDbConnection dbConnection;
         private readonly IOptions<ConnConfig> options;
 
-        public FactoryConnection(IDbConnection dbConnection)
+        public FactoryConnection(IOptions<ConnConfig> options)
         {
-            this.dbConnection = dbConnection;
+            this.options = options;
         }
 
         public void CloseConnection()
@@ -29,7 +29,7 @@ namespace Persistence.DapperConn
         {
             if (dbConnection == null)
             {
-                dbConnection = new SqlConnection(options.Value.ConnectionString);
+                dbConnection = new SqlConnection(options.Value.DefaultConnection);
             }
             if(dbConnection.State != ConnectionState.Open)
             {

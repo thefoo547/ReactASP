@@ -6,7 +6,7 @@ namespace Persistence.DapperConn
 {
     public class ConnConfig
     {
-        public string ConnectionString { get; set; }
+        public string DefaultConnection { get; set; }
 
 
     }
