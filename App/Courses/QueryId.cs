@@ -32,7 +32,9 @@ namespace App.Courses
 
             public async Task<CourseDTO> Handle(CourseById request, CancellationToken cancellationToken)
             {
-                var course = await context.Courses.Include(x => x.Instructors)
+                var course = await context.Courses.Include(x => x.OfferPrice)
+                    .Include(x => x.Comments)
+                    .Include(x => x.Instructors)
                     .ThenInclude(x => x.Instructor).FirstOrDefaultAsync(a => a.CourseId == request.Id);
                 if(course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });

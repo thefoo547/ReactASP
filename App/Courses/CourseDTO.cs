@@ -12,5 +12,7 @@ namespace App.Courses
         public DateTime? Uploaded { get; set; }
         public byte[] FacePhoto { get; set; }
         public ICollection<InstructorDTO> Instructors { get; set; }
+        public PriceDTO Price { get; set; }
+        public ICollection<CommentDTO> Comments { get; set; }
     }
 }
