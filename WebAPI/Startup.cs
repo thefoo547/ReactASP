@@ -72,7 +72,7 @@ namespace WebAPI
                 });
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
-           
+            services.AddScoped<ISessionUser, SessionUser>();
         
         }
 
