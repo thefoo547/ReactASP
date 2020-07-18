@@ -29,6 +29,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using AutoMapper;
 
 namespace WebAPI
 {
@@ -73,6 +74,7 @@ namespace WebAPI
 
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<ISessionUser, SessionUser>();
+            services.AddAutoMapper(typeof(QueryAll));
         
         }
 

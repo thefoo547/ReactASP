@@ -3,6 +3,7 @@ using MediatR;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -14,7 +15,7 @@ namespace App.Courses
     {
         public class Delete : IRequest
         {
-            public int CourseId { get; set; }
+            public Guid CourseId { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
             public DateTime? Uploaded { get; set; }
@@ -30,10 +31,19 @@ namespace App.Courses
 
             public async Task<Unit> Handle(Delete request, CancellationToken cancellationToken)
             {
+                var instructoresDB = context.CourseInstructors.Where(x => x.CourseId == request.CourseId);
+
+                foreach (var inst in instructoresDB)
+                {
+                    context.CourseInstructors.Remove(inst);
+                }
+
                 var course = await context.Courses.FindAsync(request.CourseId);
 
+
+
                 if (course == null)
-                    throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encotró el curso" });
+                    throw new BusinessException(HttpStatusCode.NotFound, new { msg = "No se encotró el curso" });
                     //throw new Exception("Dicho curso no existe");
 
                 context.Remove(course);

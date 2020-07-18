@@ -1,9 +1,11 @@
 ﻿using App.ErrorHandlers;
+using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Persistence;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading;
@@ -15,10 +17,12 @@ namespace App.Courses
     {
         public class Update : IRequest
         {
-            public int CourseId { get; set; }
+            public Guid CourseId { get; set; }
             public string Title { get; set; }
             public string Description { get; set; }
             public DateTime? Uploaded { get; set; }
+            public List<Guid> Instructors { get; set; }
+
         }
         public class Handler : IRequestHandler<Update>
         {
@@ -48,6 +52,24 @@ namespace App.Courses
                 course.Title = request.Title ?? course.Title;
                 course.Description = request.Description ?? course.Description;
                 course.Uploaded = request.Uploaded ?? course.Uploaded;
+
+                if(request.Instructors != null && request.Instructors.Count > 0)
+                {
+                    var instructorsDB = context.CourseInstructors.Where(x => x.CourseId == request.CourseId).ToList();
+                    foreach (var ins in instructorsDB)
+                    {
+                        context.CourseInstructors.Remove(ins);
+                    }
+                    foreach(var ins in request.Instructors)
+                    {
+                        var newins = new CourseInstructor
+                        {
+                            CourseId = request.CourseId,
+                            InstructorId = ins
+                        };
+                        context.CourseInstructors.Add(newins);
+                    }
+                }
 
                 var res = await context.SaveChangesAsync();
 

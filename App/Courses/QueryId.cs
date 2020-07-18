@@ -1,4 +1,5 @@
 ﻿using App.ErrorHandlers;
+using AutoMapper;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -14,26 +15,32 @@ namespace App.Courses
 {
     public class QueryId
     {
-        public class CourseById : IRequest<Course>
+        public class CourseById : IRequest<CourseDTO>
         {
-            public int Id { get; set; }
+            public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<CourseById, Course>
+        public class Handler : IRequestHandler<CourseById, CourseDTO>
         {
             private readonly AppDBContext context;
-            public Handler(AppDBContext context)
+            private readonly IMapper mapper;
+            public Handler(AppDBContext context, IMapper mapper)
             {
                 this.context = context;
+                this.mapper = mapper;
             }
 
-            public async Task<Course> Handle(CourseById request, CancellationToken cancellationToken)
+            public async Task<CourseDTO> Handle(CourseById request, CancellationToken cancellationToken)
             {
-                var course = await context.Courses.FindAsync(request.Id);
+                var course = await context.Courses.Include(x => x.Instructors)
+                    .ThenInclude(x => x.Instructor).FirstOrDefaultAsync(a => a.CourseId == request.Id);
                 if(course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
 
-                return course;
+                var courseDto = mapper.Map<Course, CourseDTO>(course);
+
+
+                return courseDto;
             }
         }
     }

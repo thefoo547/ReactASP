@@ -1,4 +1,5 @@
-﻿using Domain.Entities;
+﻿using AutoMapper;
+using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
@@ -12,23 +13,29 @@ namespace App.Courses
 {
     public class QueryAll
     {
-        public class CoursesList : IRequest<List<Course>>
+        public class CoursesList : IRequest<List<CourseDTO>>
         {
 
         }
 
-        public class Handler : IRequestHandler<CoursesList, List<Course>>
+        public class Handler : IRequestHandler<CoursesList, List<CourseDTO>>
         {
             private readonly AppDBContext context;
-            public Handler(AppDBContext context)
+            private readonly IMapper mapper;
+            public Handler(AppDBContext context, IMapper mapper)
             {
                 this.context = context;
+                this.mapper = mapper;
             }
 
-            public async Task<List<Course>> Handle(CoursesList request, CancellationToken cancellationToken)
+            public async Task<List<CourseDTO>> Handle(CoursesList request, CancellationToken cancellationToken)
             {
-                var courses = await context.Courses.ToListAsync();
-                return courses;
+                var courses = await context.Courses.Include(x=>x.Instructors)
+                    .ThenInclude(x=>x.Instructor).ToListAsync();
+
+                var coursesDto = mapper.Map<List<Course>, List<CourseDTO>>(courses);
+
+                return coursesDto;
             }
         }
     }
