@@ -16,14 +16,48 @@ namespace Persistence.DapperConn.Instructor
             this.factoryConnection = factoryConnection;
         }
 
-        public Task<int> Create(InstructorModel model)
+        public async Task<int> Create(InstructorModel model)
         {
-            throw new NotImplementedException();
+            var sp = "sp_Instructor_Create";
+            int res = 0;
+            try
+            {
+                var conn = factoryConnection.GetConnection();
+                res = await conn.ExecuteAsync(sp, 
+                    new {InstructorId = Guid.NewGuid(),
+                        model.Name, model.LastName, model.Grade },
+                    commandType:CommandType.StoredProcedure);
+
+            }
+            catch
+            {
+                throw new Exception("No se pudo ingresar");
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+            return res;
         }
 
-        public Task<int> Delete(Guid id)
+        public async Task<int> Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var sp = "sp_Instructor_delete";
+            int res = 0;
+            try
+            {
+                var conn = factoryConnection.GetConnection();
+                res = await conn.ExecuteAsync(sp, new { InstructorId = id }, commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                throw new Exception("No se pudo eliminar la data");
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+            return res;
         }
 
         public async Task<IEnumerable<InstructorModel>> FindAll()
@@ -47,14 +81,51 @@ namespace Persistence.DapperConn.Instructor
             return instructors;
         }
 
-        public Task<IEnumerable<InstructorModel>> GetById(Guid id)
+        public async Task<InstructorModel> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            InstructorModel instructor;
+            var sp = "sp_Instructor_Find";
+
+            try
+            {
+                var conn = factoryConnection.GetConnection();
+                instructor = await conn.QueryFirstAsync<InstructorModel>(sp, new { InstructorId = id }, commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                throw new Exception("Error en la base de datos");
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+            return instructor;
         }
 
-        public Task<int> Update(InstructorModel model)
+        public async Task<int> Update(InstructorModel model)
         {
-            throw new NotImplementedException();
+            var sp = "sp_Instructor_Update";
+            int res = 0;
+            try
+            {
+                var conn = factoryConnection.GetConnection();
+                res = await conn.ExecuteAsync(sp, new
+                {
+                    model.InstructorId,
+                    model.Name,
+                    model.LastName,
+                    model.Grade
+                }, commandType: CommandType.StoredProcedure);
+            }
+            catch
+            {
+                throw new Exception("No se pudo editar la data");
+            }
+            finally
+            {
+                factoryConnection.CloseConnection();
+            }
+            return res;
         }
     }
 }
