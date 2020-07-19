@@ -10,5 +10,6 @@ namespace Persistence.DapperConn.Instructor
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Grade { get; set; }
+        public DateTime? Created { get; set; }
     }
 }

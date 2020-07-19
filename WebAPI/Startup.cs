@@ -32,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using AutoMapper;
 using Persistence.DapperConn;
 using Persistence.DapperConn.Instructor;
+using Microsoft.OpenApi.Models;
 
 namespace WebAPI
 {
@@ -83,6 +84,16 @@ namespace WebAPI
 
             services.AddTransient<IFactoryConnection, FactoryConnection>();
             services.AddScoped<IInstructorRepo, InstructorRepo>();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Cursos Breves",
+                    Version = "v1"
+                });
+                c.CustomSchemaIds(c => c.FullName);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -108,6 +119,11 @@ namespace WebAPI
                 endpoints.MapControllers();
             });
 
+            app.UseSwagger();
+
+            app.UseSwaggerUI( c=> {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cursos Breve v1");
+            });
             
         }
     }

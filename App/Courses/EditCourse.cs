@@ -54,6 +54,7 @@ namespace App.Courses
                 course.Title = request.Title ?? course.Title;
                 course.Description = request.Description ?? course.Description;
                 course.Uploaded = request.Uploaded ?? course.Uploaded;
+                course.Created = DateTime.UtcNow;
 
                 var pricen = context.Prices.Where(x => x.CourseId == course.CourseId).FirstOrDefault();
                 if(pricen != null)

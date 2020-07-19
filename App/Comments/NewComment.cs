@@ -51,7 +51,8 @@ namespace App.Comments
                     Student = request.Student,
                     CommentText = request.CommentText,
                     Puntuation = request.Puntuation,
-                    CourseId = request.CourseId
+                    CourseId = request.CourseId,
+                    Created = DateTime.UtcNow
                 };
 
                 appDBContext.Comments.Add(comment);

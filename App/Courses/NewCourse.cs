@@ -47,7 +47,8 @@ namespace App.Courses
                     CourseId = cid,
                     Title = request.Title,
                     Description = request.Description,
-                    Uploaded = request.Uploaded
+                    Uploaded = request.Uploaded,
+                    Created = DateTime.UtcNow
                 };
                 context.Courses.Add(course);
                 if(request.Instructors != null)

@@ -11,5 +11,6 @@ namespace App.Courses
         public int Puntuation { get; set; }
         public string CommentText { get; set; }
         public Guid CourseId { get; set; }
+        public DateTime? Created { get; set; }
     }
 }

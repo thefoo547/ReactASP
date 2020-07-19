@@ -11,6 +11,7 @@ namespace Domain.Entities
         public string LastName { get; set; }
         public string Grade { get; set; }
         public byte[] ProfilePhoto { get; set; }
+        public DateTime? Created { get; set; }
         public ICollection<CourseInstructor> Courses { get; set; }
     }
 }
