@@ -71,7 +71,7 @@ namespace App.Secure
                 return (res.Succeeded) ? new UserData
                 {
                     FullName = user.FullName,
-                    Token = generator.CreateToken(user),
+                    Token = generator.CreateToken(user, null),
                     Username = user.UserName,
                     Email = user.Email
                 } : throw new BusinessException(System.Net.HttpStatusCode.InternalServerError, "No se pudo agregar al usuario");

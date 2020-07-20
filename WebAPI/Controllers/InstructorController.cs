@@ -1,5 +1,6 @@
 ﻿using App.Instructors;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.DapperConn.Instructor;
 using System;
@@ -9,9 +10,11 @@ using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
+    
     public class InstructorController : BreveControllerBase
     {
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<List<InstructorModel>>> GetAll()
         {
             return await Mediator.Send(new QueryAll.Execute());

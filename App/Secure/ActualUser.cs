@@ -30,12 +30,14 @@ namespace App.Secure
             {
                 var user = await userManager.FindByNameAsync(sessionUser.GetSessionUser());
 
+                var roleList = new List<string>(await userManager.GetRolesAsync(user));
+
                 return new UserData
                 {
                     FullName = user.FullName,
                     Username = user.UserName,
                     Email = user.Email,
-                    Token = generator.CreateToken(user),
+                    Token = generator.CreateToken(user, roleList),
                     Image = null
                 };
 

@@ -5,6 +5,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,9 +42,11 @@ namespace App.Secure
 
                 var res = await signInManager.CheckPasswordSignInAsync(user, request.Password, false);
 
+                var roleList = new List<string>(await userManager.GetRolesAsync(user));
+
                 return (res.Succeeded) ? new UserData {
                     FullName = user.FullName,
-                    Token = generator.CreateToken(user),
+                    Token = generator.CreateToken(user, roleList),
                     Username = user.UserName,
                     Email = user.Email,
                     Image = null
