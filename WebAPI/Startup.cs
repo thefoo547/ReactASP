@@ -68,6 +68,11 @@ namespace WebAPI
 
             var authBuilder = services.AddIdentityCore<User>();
             var identityBuilder = new IdentityBuilder(authBuilder.UserType, authBuilder.Services);
+
+            identityBuilder.AddRoles<IdentityRole>();
+            identityBuilder.AddClaimsPrincipalFactory<UserClaimsPrincipalFactory<User, IdentityRole>>();
+
+
             identityBuilder.AddEntityFrameworkStores<AppDBContext>();
             identityBuilder.AddSignInManager<SignInManager<User>>();
 
@@ -96,6 +101,7 @@ namespace WebAPI
                 });
                 c.CustomSchemaIds(c => c.FullName);
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
