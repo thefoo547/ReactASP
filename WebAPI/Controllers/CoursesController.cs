@@ -10,6 +10,7 @@ using Persistence;
 using MediatR;
 using App.Courses;
 using Microsoft.AspNetCore.Authorization;
+using Persistence.DapperConn.Pagination;
 
 namespace WebAPI.Controllers
 {
@@ -72,6 +73,12 @@ namespace WebAPI.Controllers
             //return _context.Courses.Any(e => e.CourseId == id);
 
             throw new NotImplementedException();
+        }
+
+        [HttpPost("Report")]
+        public async Task<ActionResult<PaginationModel>> Report(PaginateCourses.Execute data)
+        {
+            return await Mediator.Send(data);
         }
     }
 }
