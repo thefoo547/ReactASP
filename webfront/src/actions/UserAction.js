@@ -7,3 +7,11 @@ export const SigninUser = user=>{
         });
     });
 }
+
+export const LoginUser = user => {
+    return new Promise ((resolve, eject) => {
+        HttpRequest.post('/User/login', user).then(response =>{
+            resolve(response);
+        });
+    });
+}
