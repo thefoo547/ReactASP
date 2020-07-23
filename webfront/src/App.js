@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {ThemeProvider as MuiThemeProvider} from '@material-ui/core/styles';
 import Theme from './theme/Theme'
 import { Grid } from '@material-ui/core';
@@ -12,6 +12,12 @@ import { useStateValue } from './context/Store';
 function App() {
   const [{sessionUser}, dispatch] = useStateValue();
   const [startApp, setStartApp] = useState(false);
+
+  useEffect(()=>{
+    if(!startApp){
+      
+    }
+  });
 
   return (
     <Router>
