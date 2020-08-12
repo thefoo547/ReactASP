@@ -34,6 +34,9 @@ using Persistence.DapperConn;
 using Persistence.DapperConn.Instructor;
 using Microsoft.OpenApi.Models;
 using Persistence.DapperConn.Pagination;
+using Swashbuckle.AspNetCore.ReDoc;
+using System.Reflection;
+using System.IO;
 
 namespace WebAPI
 {
@@ -96,6 +99,7 @@ namespace WebAPI
             services.AddScoped<IInstructorRepo, InstructorRepo>();
             services.AddScoped<IPagination, PaginationRepo>();
 
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -104,6 +108,10 @@ namespace WebAPI
                     Version = "v1"
                 });
                 c.CustomSchemaIds(c => c.FullName);
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
         }
@@ -137,7 +145,10 @@ namespace WebAPI
             app.UseSwaggerUI( c=> {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cursos Breve v1");
             });
-            
+            app.UseReDoc( c=> {
+                c.DocumentTitle = "Breve Courses Docs";
+                c.SpecUrl("/swagger/v1/swagger.json");
+            });
         }
     }
 }

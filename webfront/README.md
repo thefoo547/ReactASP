@@ -1,3 +1,0 @@
-# ReactASP
-
-Frontend App
