@@ -3,11 +3,7 @@ using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Persistence;
-using Persistence.DapperConn.Instructor;
 using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 

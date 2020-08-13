@@ -2,9 +2,6 @@
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -35,7 +32,7 @@ namespace App.Secure
             public async Task<Unit> Handle(Execute request, CancellationToken cancellationToken)
             {
                 var role = await roleManager.FindByNameAsync(request.Name);
-                if(role != null)
+                if (role != null)
                     throw new BusinessException(System.Net.HttpStatusCode.BadRequest, "Ya existe el rol");
 
                 var res = await roleManager.CreateAsync(new IdentityRole(request.Name));
@@ -45,5 +42,5 @@ namespace App.Secure
             }
         }
     }
-    
+
 }

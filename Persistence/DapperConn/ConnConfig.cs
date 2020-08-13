@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Persistence.DapperConn
+﻿namespace Persistence.DapperConn
 {
     public class ConnConfig
     {

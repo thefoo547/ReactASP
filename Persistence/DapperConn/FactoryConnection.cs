@@ -1,9 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Text;
 
 namespace Persistence.DapperConn
 {
@@ -31,7 +28,7 @@ namespace Persistence.DapperConn
             {
                 dbConnection = new SqlConnection(options.Value.DefaultConnection);
             }
-            if(dbConnection.State != ConnectionState.Open)
+            if (dbConnection.State != ConnectionState.Open)
             {
                 dbConnection.Open();
             }

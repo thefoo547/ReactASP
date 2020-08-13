@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistence.DapperConn.Instructor
@@ -23,10 +22,15 @@ namespace Persistence.DapperConn.Instructor
             try
             {
                 var conn = factoryConnection.GetConnection();
-                res = await conn.ExecuteAsync(sp, 
-                    new {InstructorId = Guid.NewGuid(),
-                        model.Name, model.LastName, model.Grade },
-                    commandType:CommandType.StoredProcedure);
+                res = await conn.ExecuteAsync(sp,
+                    new
+                    {
+                        InstructorId = Guid.NewGuid(),
+                        model.Name,
+                        model.LastName,
+                        model.Grade
+                    },
+                    commandType: CommandType.StoredProcedure);
 
             }
             catch

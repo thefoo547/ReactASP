@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -57,7 +56,7 @@ namespace App.Courses
                 course.Created = DateTime.UtcNow;
 
                 var pricen = context.Prices.Where(x => x.CourseId == course.CourseId).FirstOrDefault();
-                if(pricen != null)
+                if (pricen != null)
                 {
                     pricen.Promo = request.Discount ?? pricen.Promo;
                     pricen.ActualPrice = request.PriceActual ?? pricen.ActualPrice;
@@ -73,14 +72,14 @@ namespace App.Courses
                     };
                 }
 
-                if(request.Instructors != null && request.Instructors.Count > 0)
+                if (request.Instructors != null && request.Instructors.Count > 0)
                 {
                     var instructorsDB = context.CourseInstructors.Where(x => x.CourseId == request.CourseId).ToList();
                     foreach (var ins in instructorsDB)
                     {
                         context.CourseInstructors.Remove(ins);
                     }
-                    foreach(var ins in request.Instructors)
+                    foreach (var ins in request.Instructors)
                     {
                         var newins = new CourseInstructor
                         {

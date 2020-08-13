@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,10 +29,10 @@ namespace App.Courses
 
             public async Task<List<CourseDTO>> Handle(CoursesList request, CancellationToken cancellationToken)
             {
-                var courses = await context.Courses.Include(x=>x.OfferPrice)
-                    .Include(x=>x.Comments)
-                    .Include(x=>x.Instructors)
-                    .ThenInclude(x=>x.Instructor).ToListAsync();
+                var courses = await context.Courses.Include(x => x.OfferPrice)
+                    .Include(x => x.Comments)
+                    .Include(x => x.Instructors)
+                    .ThenInclude(x => x.Instructor).ToListAsync();
 
                 Console.WriteLine(courses[0]);
 

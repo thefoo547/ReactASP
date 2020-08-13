@@ -1,23 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Domain.Entities;
-using Persistence;
+﻿using App.Courses;
 using MediatR;
-using App.Courses;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Persistence.DapperConn.Pagination;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
     public class CoursesController : BreveControllerBase
     {
         // GET: api/Courses
-        
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CourseDTO>>> GetCourses()
         {
@@ -25,7 +19,7 @@ namespace WebAPI.Controllers
         }
 
         // GET: api/Courses/5
-        
+
         [HttpGet("{id}")]
         public async Task<ActionResult<CourseDTO>> GetCourse(Guid id)
         {
@@ -43,7 +37,7 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        
+
         public async Task<ActionResult<Unit>> PutCourse(Guid id, EditCourse.Update course)
         {
             course.CourseId = id;
@@ -55,7 +49,7 @@ namespace WebAPI.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        
+
         public async Task<ActionResult<Unit>> PostCourse(NewCourse.Create newcourse)
         {
             return await Mediator.Send(newcourse);
@@ -65,7 +59,7 @@ namespace WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Unit>> DeleteCourse(Guid id)
         {
-            return await Mediator.Send(new RemoveCourse.Delete(){CourseId=id });
+            return await Mediator.Send(new RemoveCourse.Delete() { CourseId = id });
         }
 
         private bool CourseExists(int id)

@@ -4,8 +4,6 @@ using MediatR;
 using Persistence;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,7 +49,7 @@ namespace App.Courses
                     Created = DateTime.UtcNow
                 };
                 context.Courses.Add(course);
-                if(request.Instructors != null)
+                if (request.Instructors != null)
                 {
                     foreach (var id in request.Instructors)
                     {

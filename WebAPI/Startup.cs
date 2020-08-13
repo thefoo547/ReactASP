@@ -1,42 +1,34 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.Contracts;
+using App.Courses;
+using App.Secure;
+using AutoMapper;
+using Domain.Entities;
+using FluentValidation.AspNetCore;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Persistence;
-using App.Courses;
-using FluentValidation.AspNetCore;
-using WebAPI.Middleware;
-using Domain.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.AspNetCore.Authentication;
-using App.Secure;
-using App.Contracts;
-using Security.Token;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Text;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
-using AutoMapper;
+using Microsoft.OpenApi.Models;
+using Persistence;
 using Persistence.DapperConn;
 using Persistence.DapperConn.Instructor;
-using Microsoft.OpenApi.Models;
 using Persistence.DapperConn.Pagination;
-using Swashbuckle.AspNetCore.ReDoc;
-using System.Reflection;
+using Security.Token;
+using System;
 using System.IO;
+using System.Reflection;
+using System.Text;
+using WebAPI.Middleware;
 
 namespace WebAPI
 {
@@ -66,7 +58,8 @@ namespace WebAPI
             services.AddMediatR(typeof(QueryAll.Handler).Assembly);
             // ES NECESARIO AGREGAR LOS MEDIATR CON ESTRUCTURAS DIFERENTES
             services.AddMediatR(typeof(Login.Handler).Assembly);
-            services.AddControllers(opt => {
+            services.AddControllers(opt =>
+            {
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
@@ -84,7 +77,8 @@ namespace WebAPI
             identityBuilder.AddSignInManager<SignInManager<User>>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters { 
+                .AddJwtBearer(opt => opt.TokenValidationParameters = new TokenValidationParameters
+                {
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.Unicode.GetBytes("Palabra secreta")),
                     ValidateAudience = false,
@@ -124,13 +118,13 @@ namespace WebAPI
             if (env.IsDevelopment())
             {
                 //app.UseDeveloperExceptionPage();
-                
+
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseAuthentication();
-            
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -142,13 +136,17 @@ namespace WebAPI
 
             app.UseSwagger();
 
-            app.UseSwaggerUI( c=> {
+            app.UseSwaggerUI(c =>
+            {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Cursos Breve v1");
             });
-            app.UseReDoc( c=> {
+            app.UseReDoc(c =>
+            {
                 c.DocumentTitle = "Breve Courses Docs";
                 c.SpecUrl("/swagger/v1/swagger.json");
             });
+
+
         }
     }
 }

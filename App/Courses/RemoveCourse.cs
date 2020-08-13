@@ -2,10 +2,8 @@
 using MediatR;
 using Persistence;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,7 +52,7 @@ namespace App.Courses
 
                 if (course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { msg = "No se encotró el curso" });
-                    //throw new Exception("Dicho curso no existe");
+                //throw new Exception("Dicho curso no existe");
 
                 context.Remove(course);
 

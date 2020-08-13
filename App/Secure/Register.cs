@@ -6,10 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -54,7 +51,7 @@ namespace App.Secure
             public async Task<UserData> Handle(Signup request, CancellationToken cancellationToken)
             {
                 //ver si existe
-                var exists = (await context.Users.Where(x => x.Email == request.Email).AnyAsync() 
+                var exists = (await context.Users.Where(x => x.Email == request.Email).AnyAsync()
                     || await context.Users.Where(x => x.UserName == request.Username).AnyAsync());
                 if (exists)
                     throw new BusinessException(System.Net.HttpStatusCode.BadRequest, new { msg = "Ya existe un usuario registrado con este email" });

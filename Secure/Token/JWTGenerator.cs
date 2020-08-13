@@ -17,9 +17,9 @@ namespace Security.Token
                 new Claim(JwtRegisteredClaimNames.NameId, user.UserName)
             };
 
-            if(roles != null)
+            if (roles != null)
             {
-                foreach(var rol in roles)
+                foreach (var rol in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, rol));
                 }

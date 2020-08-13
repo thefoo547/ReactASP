@@ -5,9 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using System;
-using System.Collections.Generic;
 using System.Net;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -36,7 +34,7 @@ namespace App.Courses
                     .Include(x => x.Comments)
                     .Include(x => x.Instructors)
                     .ThenInclude(x => x.Instructor).FirstOrDefaultAsync(a => a.CourseId == request.Id);
-                if(course == null)
+                if (course == null)
                     throw new BusinessException(HttpStatusCode.NotFound, new { curso = "No se encontró el curso" });
 
                 var courseDto = mapper.Map<Course, CourseDTO>(course);

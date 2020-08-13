@@ -5,12 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using Persistence.DapperConn.Instructor;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WebAPI.Controllers
 {
-    
+
     public class InstructorController : BreveControllerBase
     {
         [HttpGet]
@@ -23,7 +22,7 @@ namespace WebAPI.Controllers
         public async Task<ActionResult<Unit>> Create(NewInstructor.Execute data)
         {
             return await Mediator.Send(data);
-        } 
+        }
         [HttpPut("{id}")]
         public async Task<ActionResult<Unit>> Update(EditInstructor.Execute data, Guid id)
         {

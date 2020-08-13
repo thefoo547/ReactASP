@@ -3,8 +3,6 @@ using FluentValidation;
 using MediatR;
 using Persistence.DapperConn.Instructor;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -37,8 +35,8 @@ namespace App.Instructors
 
             public async Task<Unit> Handle(Execute request, CancellationToken cancellationToken)
             {
-                return (await instructorRepo.Delete(request.InstructorId)>0)? 
-                    Unit.Value : throw new BusinessException(System.Net.HttpStatusCode.InternalServerError, "No se pudo eliminar") ;
+                return (await instructorRepo.Delete(request.InstructorId) > 0) ?
+                    Unit.Value : throw new BusinessException(System.Net.HttpStatusCode.InternalServerError, "No se pudo eliminar");
             }
         }
 

@@ -1,10 +1,8 @@
 ﻿using Dapper;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Persistence.DapperConn.Pagination
@@ -18,7 +16,7 @@ namespace Persistence.DapperConn.Pagination
             this.factoryConnection = factoryConnection;
         }
 
-        public async Task<PaginationModel> GetPagination(string storedProcedure, int pageNo, 
+        public async Task<PaginationModel> GetPagination(string storedProcedure, int pageNo,
             int qty, IDictionary<string, object> filters, string ordering)
         {
             PaginationModel paginacionModel = new PaginationModel();

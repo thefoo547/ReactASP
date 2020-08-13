@@ -2,10 +2,6 @@
 using FluentValidation;
 using MediatR;
 using Persistence.DapperConn.Instructor;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,9 +38,13 @@ namespace App.Instructors
             public async Task<Unit> Handle(Execute request, CancellationToken cancellationToken)
             {
                 return (await instructorRepo.
-                    Create(new InstructorModel { Name = request.Name, 
-                        LastName = request.LastName, Grade = request.Grade }) > 0)? Unit.Value : 
-                        throw new BusinessException(System.Net.HttpStatusCode.InternalServerError, 
+                    Create(new InstructorModel
+                    {
+                        Name = request.Name,
+                        LastName = request.LastName,
+                        Grade = request.Grade
+                    }) > 0) ? Unit.Value :
+                        throw new BusinessException(System.Net.HttpStatusCode.InternalServerError,
                         "No se pudo ingresar el instructor");
             }
         }

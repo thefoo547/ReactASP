@@ -4,7 +4,6 @@ using Domain.Entities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -44,7 +43,8 @@ namespace App.Secure
 
                 var roleList = new List<string>(await userManager.GetRolesAsync(user));
 
-                return (res.Succeeded) ? new UserData {
+                return (res.Succeeded) ? new UserData
+                {
                     FullName = user.FullName,
                     Token = generator.CreateToken(user, roleList),
                     Username = user.UserName,
@@ -63,6 +63,6 @@ namespace App.Secure
             }
         }
 
-        
+
     }
 }
